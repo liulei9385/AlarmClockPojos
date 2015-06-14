@@ -27,10 +27,14 @@ public class DbCurdHelper {
         executeSql.append("ceate table ")
                 .append(table)
                 .append("(");
+        Class<?> superClazz = clazz.getSuperclass();
+        java.lang.reflect.Field[] superFields = superClazz.getDeclaredFields();
         java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        System.out.println(fields.length);
+        java.lang.reflect.Field[] currFields = new java.lang.reflect.Field[superFields.length + fields.length];
+        System.arraycopy(superFields, 0, currFields, 0, currFields.length);
+        System.arraycopy(fields, 0, currFields, superFields.length, fields.length);
         int count = 0;
-        for (java.lang.reflect.Field field : fields) {
+        for (java.lang.reflect.Field field : currFields) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(Field.class)) {
                 Field ann = field.getAnnotation(Field.class);
