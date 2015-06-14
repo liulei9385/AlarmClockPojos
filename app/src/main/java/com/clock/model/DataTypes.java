@@ -36,7 +36,7 @@ public enum DataTypes {
         if (dataTypes != null) {
             switch (dataTypes) {
                 case INT:
-                    formatString += "int";
+                    formatString += "INTEGER";
                     break;
                 case DOUBLE:
                     formatString += "double";
