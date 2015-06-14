@@ -147,7 +147,13 @@ public class DbCurdHelper {
                     BaseTableBean bean = clazz.newInstance();
                     java.lang.reflect.Field[] fields = getAllFields(clazz);
                     for (java.lang.reflect.Field field : fields) {
-                        int index = cursor.getColumnIndex(field.getName());
+                        String culomnName = field.getName();
+                        if (field.isAnnotationPresent(Field.class)) {
+                            culomnName = field.getAnnotation(Field.class).name();
+                        } else if (field.isAnnotationPresent(Id.class)) {
+                            culomnName = field.getAnnotation(Id.class).name();
+                        }
+                        int index = cursor.getColumnIndex(culomnName);
                         if (index != -1) {
                             int type = getTyp(field);
                             Object obj = null;
