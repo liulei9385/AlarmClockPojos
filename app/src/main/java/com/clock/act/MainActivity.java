@@ -45,8 +45,6 @@ public class MainActivity extends BaseActivity {
         clock.setStarttime(System.currentTimeMillis());
         clock.setEndtime(System.currentTimeMillis() + 60 * 1000);
         curdHelper.insert(clock);
-
-        curdHelper.create(clock);
     }
 }
 

@@ -24,15 +24,14 @@ public class DbCurdHelper {
         String table = ContentValuesBuilder.getTableName(clazz);
         StringBuilder executeSql = new StringBuilder();
 
-        executeSql.append("drop table ")
-                .append(table)
-                .append("if exists;");
+        executeSql.append("drop table if exists ")
+                .append(table).append(";");
 
         dataBase.execSQL(executeSql.toString());
 
         executeSql.delete(0, executeSql.length());
 
-        executeSql.append("ceate table ")
+        executeSql.append("create table ")
                 .append(table)
                 .append("(");
 
@@ -58,7 +57,7 @@ public class DbCurdHelper {
             count++;
         }
         executeSql.append(");");
-        System.out.println("DbCurdHelper.create" + executeSql.toString());
+        System.out.println("DbCurdHelper.create \t" + executeSql.toString());
         dataBase.execSQL(executeSql.toString());
         //dataBase.execSQL(executeSql.toString());
     }

@@ -8,7 +8,7 @@ import com.clock.anno.Table;
  * DATE: 2015/6/14
  * TIME: 17:34
  */
-@Table(value = "amcolck")
+@Table(value = "amclock")
 public class AlarmClockBean extends BaseTableBean {
 
     @Field(name = "name", type = "varchar(20)")
