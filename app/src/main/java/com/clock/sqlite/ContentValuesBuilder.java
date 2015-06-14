@@ -14,9 +14,8 @@ import java.lang.reflect.Field;
  */
 public class ContentValuesBuilder {
 
-    public static String getTableName(BaseTableBean bean) {
+    public static String getTableName(Class<? extends BaseTableBean> clazz) {
         String tableName = "";
-        Class<? extends BaseTableBean> clazz = bean.getClass();
         if (clazz != null) {
             if (clazz.isAnnotationPresent(Table.class)) {
                 Table table = clazz.getAnnotation(Table.class);

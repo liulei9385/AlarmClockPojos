@@ -20,20 +20,24 @@ public class DbCurdHelper {
         this.dataBase = dataBase;
     }
 
-    public void create(BaseTableBean bean) {
-        final Class<? extends BaseTableBean> clazz = bean.getClass();
-        String table = ContentValuesBuilder.getTableName(bean);
+    public void create(Class<? extends BaseTableBean> clazz) {
+        String table = ContentValuesBuilder.getTableName(clazz);
         StringBuilder executeSql = new StringBuilder();
+
+        executeSql.append("drop table ")
+                .append(table)
+                .append("if exists;");
+
+        dataBase.execSQL(executeSql.toString());
+
+        executeSql.delete(0, executeSql.length());
+
         executeSql.append("ceate table ")
                 .append(table)
                 .append("(");
-        Class<?> superClazz = clazz.getSuperclass();
-        java.lang.reflect.Field[] superFields = superClazz.getDeclaredFields();
-        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        java.lang.reflect.Field[] currFields = new java.lang.reflect
-                .Field[superFields.length + fields.length];
-        System.arraycopy(superFields, 0, currFields, 0, superFields.length);
-        System.arraycopy(fields, 0, currFields, superFields.length, fields.length);
+
+        java.lang.reflect.Field[] currFields = getAllFields(clazz);
+
         int count = 0;
         for (java.lang.reflect.Field field : currFields) {
             field.setAccessible(true);
@@ -53,13 +57,26 @@ public class DbCurdHelper {
             field.setAccessible(false);
             count++;
         }
-        executeSql.append(")");
+        executeSql.append(");");
         System.out.println("DbCurdHelper.create" + executeSql.toString());
+        dataBase.execSQL(executeSql.toString());
         //dataBase.execSQL(executeSql.toString());
     }
 
+    private java.lang.reflect.Field[] getAllFields(Class<? extends BaseTableBean> clazz) {
+        Class<?> superClazz = clazz.getSuperclass();
+        java.lang.reflect.Field[] superFields = superClazz.getDeclaredFields();
+        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+        java.lang.reflect.Field[] currFields = new java.lang.reflect
+                .Field[superFields.length + fields.length];
+        System.arraycopy(superFields, 0, currFields, 0, superFields.length);
+        System.arraycopy(fields, 0, currFields, superFields.length, fields.length);
+
+        return currFields;
+    }
+
     public long insert(BaseTableBean bean) {
-        String table = ContentValuesBuilder.getTableName(bean);
+        String table = ContentValuesBuilder.getTableName(bean.getClass());
         ContentValues contentValues = ContentValuesBuilder.getContentValues(bean);
         return dataBase.insert(table, null, contentValues);
     }
