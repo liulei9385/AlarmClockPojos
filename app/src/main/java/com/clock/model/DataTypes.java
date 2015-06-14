@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public enum DataTypes {
 
-    INT("int"), LONG("long"), STRING("long"), DATE("date"), BYTE("byte"),
+    INT("int"), LONG("long"), STRING("string"), DATE("datetime"), BYTE("byte"),
     DOUBLE("double"), FLOAT("float"), BYTES("byte[]");
 
     private String str;

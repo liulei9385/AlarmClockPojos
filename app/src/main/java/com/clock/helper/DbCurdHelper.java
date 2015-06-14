@@ -24,7 +24,8 @@ public class DbCurdHelper {
     public static final int INTERGE = 1;
     public static final int FLOAT = 2;
     public static final int DOUBLE = 3;
-    public static final int STRING = 4;
+    public static final int LONG = 4;
+    public static final int STRING = 5;
 
     public DbCurdHelper(SQLiteDatabase dataBase) {
         this.dataBase = dataBase;
@@ -48,6 +49,10 @@ public class DbCurdHelper {
 
             case STRING:
                 type = STRING;
+                break;
+
+            case LONG:
+                type = LONG;
                 break;
 
             default:
@@ -169,6 +174,10 @@ public class DbCurdHelper {
 
                                 case DOUBLE:
                                     obj = cursor.getDouble(index);
+                                    break;
+
+                                case LONG:
+                                    obj = cursor.getLong(index);
                                     break;
 
                                 case STRING:

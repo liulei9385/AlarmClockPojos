@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.clock.R;
 import com.clock.helper.DbCurdHelper;
 import com.clock.model.AlarmClockBean;
-import com.clock.model.BaseTableBean;
 import com.clock.sqlite.DatabaseHelper;
 import com.clock.utils.Constant;
 
@@ -43,14 +42,15 @@ public class MainActivity extends BaseActivity {
         curdHelper = new DbCurdHelper(db);
 
         AlarmClockBean clock = new AlarmClockBean();
-        clock.setName("leilei");
+        clock.setName("leilei12");
         clock.setStarttime(System.currentTimeMillis());
         clock.setEndtime(System.currentTimeMillis() + 60 * 1000);
         curdHelper.insert(clock);
 
         List<AlarmClockBean> list = curdHelper.queryAll(AlarmClockBean.class);
+        System.out.println("MainActivity.initDB# \t" + list.size());
         for (AlarmClockBean bean : list) {
-            System.out.println("MainActivity.initDB##" + bean.toString());
+            System.out.println("MainActivity.initDB# \t" + bean.getName() + "\t" + bean.getStarttime() + "\t");
         }
     }
 
