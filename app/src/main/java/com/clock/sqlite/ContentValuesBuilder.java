@@ -45,9 +45,4 @@ public class ContentValuesBuilder {
         return values;
     }
 
-    public static DataTypes getType(Field field) {
-        return DataTypes.valueOf(field.getName().toUpperCase());
-    }
-
-
 }

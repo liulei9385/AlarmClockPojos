@@ -30,8 +30,8 @@ public class DbCurdHelper {
         this.dataBase = dataBase;
     }
 
-    private static int getTyp(java.lang.reflect.Field field) {
-        DataTypes types = ContentValuesBuilder.getType(field);
+    private static int getType(java.lang.reflect.Field field) {
+        DataTypes types = DataTypes.getType(field.getType());
         int type;
         switch (types) {
             case INT:
@@ -147,6 +147,7 @@ public class DbCurdHelper {
                     BaseTableBean bean = clazz.newInstance();
                     java.lang.reflect.Field[] fields = getAllFields(clazz);
                     for (java.lang.reflect.Field field : fields) {
+                        field.setAccessible(true);
                         String culomnName = field.getName();
                         if (field.isAnnotationPresent(Field.class)) {
                             culomnName = field.getAnnotation(Field.class).name();
@@ -155,7 +156,7 @@ public class DbCurdHelper {
                         }
                         int index = cursor.getColumnIndex(culomnName);
                         if (index != -1) {
-                            int type = getTyp(field);
+                            int type = getType(field);
                             Object obj = null;
                             switch (type) {
                                 case INTERGE:
@@ -177,6 +178,7 @@ public class DbCurdHelper {
                             field.set(bean, obj);
                         }
                         list.add((T) bean);
+                        field.setAccessible(false);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
