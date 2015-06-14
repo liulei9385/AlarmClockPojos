@@ -35,16 +35,21 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initDB() {
-
         // insert a table
         databaseHelper = new DatabaseHelper(this);
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         curdHelper = new DbCurdHelper(db);
+
+        curdHelper.dropTable(AlarmClockBean.class);
+
+        curdHelper.create(AlarmClockBean.class);
+
         AlarmClockBean clock = new AlarmClockBean();
         clock.setName("leilei");
         clock.setStarttime(System.currentTimeMillis());
         clock.setEndtime(System.currentTimeMillis() + 60 * 1000);
         curdHelper.insert(clock);
     }
+
 }
 

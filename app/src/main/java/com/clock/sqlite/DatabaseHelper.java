@@ -35,11 +35,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         new DbCurdHelper(db).create(AlarmClockBean.class);
-        /*String sql = "drop table if exists " + Constant.TABLENAME + ";";
-        db.execSQL(sql);
-        sql += "create table " + Constant.TABLENAME + "(id int auto incresment,name varchar(20)," +
-                "starttime long ,endtime long);";
-        db.execSQL(sql);*/
     }
 
     @Override

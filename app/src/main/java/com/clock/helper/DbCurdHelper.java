@@ -3,6 +3,7 @@ package com.clock.helper;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import com.clock.anno.Field;
+import com.clock.anno.Id;
 import com.clock.model.BaseTableBean;
 import com.clock.model.DataTypes;
 import com.clock.sqlite.ContentValuesBuilder;
@@ -40,7 +41,14 @@ public class DbCurdHelper {
         int count = 0;
         for (java.lang.reflect.Field field : currFields) {
             field.setAccessible(true);
-            if (field.isAnnotationPresent(Field.class)) {
+            if (field.isAnnotationPresent(Id.class)) {
+                Id ann = field.getAnnotation(Id.class);
+                executeSql.append(ann.name())
+                        .append(" ")
+                        .append(DataTypes.getTypeString(field.getType()))
+                        .append(" primary key autoincrement")
+                        .append(count + 1 == currFields.length ? "" : ",");
+            } else if (field.isAnnotationPresent(Field.class)) {
                 Field ann = field.getAnnotation(Field.class);
                 String annovV = ann.name();
                 executeSql.append(annovV)
@@ -78,5 +86,15 @@ public class DbCurdHelper {
         String table = ContentValuesBuilder.getTableName(bean.getClass());
         ContentValues contentValues = ContentValuesBuilder.getContentValues(bean);
         return dataBase.insert(table, null, contentValues);
+    }
+
+    public void dropTable(Class<? extends BaseTableBean> clazz) {
+        String sql = "drop table if exists " + ContentValuesBuilder.getTableName(clazz);
+        this.dataBase.execSQL(sql);
+    }
+
+    public void isTableExist(Class<? extends BaseTableBean> clazz) {
+        String sql = "if exists " + ContentValuesBuilder.getTableName(clazz);
+        this.dataBase.execSQL(sql);
     }
 }
