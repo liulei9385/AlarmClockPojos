@@ -28,8 +28,10 @@ public class DbCurdHelper {
                 .append(table)
                 .append("(");
         java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
+        System.out.println(fields.length);
         int count = 0;
         for (java.lang.reflect.Field field : fields) {
+            field.setAccessible(true);
             if (field.isAnnotationPresent(Field.class)) {
                 Field ann = field.getAnnotation(Field.class);
                 String annovV = ann.name();
@@ -42,6 +44,7 @@ public class DbCurdHelper {
                         .append(DataTypes.getTypeString(field.getType()))
                         .append(count + 1 == fields.length ? "" : ",");
             }
+            field.setAccessible(false);
             count++;
         }
         executeSql.append(")");
