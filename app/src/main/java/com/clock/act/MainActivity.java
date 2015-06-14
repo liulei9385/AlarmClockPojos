@@ -1,13 +1,15 @@
 package com.clock.act;
 
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import com.clock.R;
 import com.clock.helper.DbCurdHelper;
 import com.clock.model.AlarmClockBean;
+import com.clock.model.BaseTableBean;
 import com.clock.sqlite.DatabaseHelper;
 import com.clock.utils.Constant;
+
+import java.util.List;
 
 /**
  * USER: liulei
@@ -40,15 +42,16 @@ public class MainActivity extends BaseActivity {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         curdHelper = new DbCurdHelper(db);
 
-        curdHelper.dropTable(AlarmClockBean.class);
-
-        curdHelper.create(AlarmClockBean.class);
-
         AlarmClockBean clock = new AlarmClockBean();
         clock.setName("leilei");
         clock.setStarttime(System.currentTimeMillis());
         clock.setEndtime(System.currentTimeMillis() + 60 * 1000);
         curdHelper.insert(clock);
+
+        List<AlarmClockBean> list = curdHelper.queryAll(AlarmClockBean.class);
+        for (AlarmClockBean bean : list) {
+            System.out.println("MainActivity.initDB##" + bean.toString());
+        }
     }
 
 }

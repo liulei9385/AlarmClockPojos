@@ -1,12 +1,16 @@
 package com.clock.helper;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.clock.anno.Field;
 import com.clock.anno.Id;
 import com.clock.model.BaseTableBean;
 import com.clock.model.DataTypes;
 import com.clock.sqlite.ContentValuesBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * USER: liulei
@@ -17,8 +21,40 @@ public class DbCurdHelper {
 
     public SQLiteDatabase dataBase;
 
+    public static final int INTERGE = 1;
+    public static final int FLOAT = 2;
+    public static final int DOUBLE = 3;
+    public static final int STRING = 4;
+
     public DbCurdHelper(SQLiteDatabase dataBase) {
         this.dataBase = dataBase;
+    }
+
+    private static int getTyp(java.lang.reflect.Field field) {
+        DataTypes types = ContentValuesBuilder.getType(field);
+        int type;
+        switch (types) {
+            case INT:
+                type = INTERGE;
+                break;
+
+            case FLOAT:
+                type = FLOAT;
+                break;
+
+            case DOUBLE:
+                type = DOUBLE;
+                break;
+
+            case STRING:
+                type = STRING;
+                break;
+
+            default:
+                type = INTERGE;
+                break;
+        }
+        return type;
     }
 
     public void create(Class<? extends BaseTableBean> clazz) {
@@ -97,4 +133,52 @@ public class DbCurdHelper {
         String sql = "if exists " + ContentValuesBuilder.getTableName(clazz);
         this.dataBase.execSQL(sql);
     }
+
+    public <T extends BaseTableBean> List<T> queryAll(Class<T> clazz) {
+        List<T> list = new ArrayList<T>(5);
+        String table = ContentValuesBuilder.getTableName(clazz);
+        String[] columns = new String[]{};
+        String orderBy = "";
+        Cursor cursor = this.dataBase.query(table, columns, null,
+                null, null, null, orderBy, null);
+        if (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
+                try {
+                    BaseTableBean bean = clazz.newInstance();
+                    java.lang.reflect.Field[] fields = getAllFields(clazz);
+                    for (java.lang.reflect.Field field : fields) {
+                        int index = cursor.getColumnIndex(field.getName());
+                        if (index != -1) {
+                            int type = getTyp(field);
+                            Object obj = null;
+                            switch (type) {
+                                case INTERGE:
+                                    obj = cursor.getInt(index);
+                                    break;
+
+                                case FLOAT:
+                                    obj = cursor.getFloat(index);
+                                    break;
+
+                                case DOUBLE:
+                                    obj = cursor.getDouble(index);
+                                    break;
+
+                                case STRING:
+                                    obj = cursor.getString(index);
+                                    break;
+                            }
+                            field.set(bean, obj);
+                        }
+                        list.add((T) bean);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        cursor.close();
+        return list;
+    }
+
 }

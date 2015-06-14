@@ -41,4 +41,13 @@ public class AlarmClockBean extends BaseTableBean {
     public void setEndtime(long endtime) {
         this.endtime = endtime;
     }
+
+    @Override
+    public String toString() {
+        return "AlarmClockBean{" +
+                "name='" + name + '\'' +
+                ", starttime=" + starttime +
+                ", endtime=" + endtime +
+                '}';
+    }
 }
