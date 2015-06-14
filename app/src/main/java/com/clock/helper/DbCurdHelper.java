@@ -198,4 +198,12 @@ public class DbCurdHelper {
         return list;
     }
 
+    public Cursor queryAllWithCursor(Class<? extends BaseTableBean> clazz) {
+        String table = ContentValuesBuilder.getTableName(clazz);
+        String[] columns = new String[]{};
+        String orderBy = "";
+        return this.dataBase.query(table, columns, null,
+                null, null, null, orderBy, null);
+    }
+
 }
