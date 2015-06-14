@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.nameforcast.pojo.util.ImageUtils;
+import com.clock.utils.ImageUtils;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;

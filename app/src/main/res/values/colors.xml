@@ -2,4 +2,5 @@
 <resources>
     <color name="colorPrimary">#ff3385ff</color>
     <color name="colorPrimaryDark">#ff303f9f</color>
+    <color name="item_selected">#ff80cbc4</color>
 </resources>
