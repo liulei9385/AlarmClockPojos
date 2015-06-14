@@ -30,7 +30,8 @@ public class DbCurdHelper {
         Class<?> superClazz = clazz.getSuperclass();
         java.lang.reflect.Field[] superFields = superClazz.getDeclaredFields();
         java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-        java.lang.reflect.Field[] currFields = new java.lang.reflect.Field[superFields.length + fields.length];
+        java.lang.reflect.Field[] currFields = new java.lang.reflect
+                .Field[superFields.length + fields.length];
         System.arraycopy(superFields, 0, currFields, 0, superFields.length);
         System.arraycopy(fields, 0, currFields, superFields.length, fields.length);
         int count = 0;
@@ -42,11 +43,12 @@ public class DbCurdHelper {
                 executeSql.append(annovV)
                         .append(" ")
                         .append(ann.type())
-                        .append(count + 1 == fields.length ? "" : ",");
+                        .append(count + 1 == currFields.length ? "" : ",");
             } else {
                 executeSql.append(field.getName())
+                        .append(" ")
                         .append(DataTypes.getTypeString(field.getType()))
-                        .append(count + 1 == fields.length ? "" : ",");
+                        .append(count + 1 == currFields.length ? "" : ",");
             }
             field.setAccessible(false);
             count++;
