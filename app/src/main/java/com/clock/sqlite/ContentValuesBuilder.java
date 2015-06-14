@@ -14,8 +14,9 @@ import java.lang.reflect.Field;
  */
 public class ContentValuesBuilder {
 
-    public static String getTableName(Class<? extends BaseTableBean> clazz) {
+    public static String getTableName(BaseTableBean bean) {
         String tableName = "";
+        Class<? extends BaseTableBean> clazz = bean.getClass();
         if (clazz != null) {
             if (clazz.isAnnotationPresent(Table.class)) {
                 Table table = clazz.getAnnotation(Table.class);
@@ -25,14 +26,17 @@ public class ContentValuesBuilder {
         return tableName;
     }
 
-    public static ContentValues getContentValues(Class<? extends BaseTableBean> clazz) {
+    public static ContentValues getContentValues(BaseTableBean bean) {
+        if (bean == null)
+            return null;
         ContentValues values = new ContentValues();
+        Class<? extends BaseTableBean> clazz = bean.getClass();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
                 String fieldName = field.getName();
-                Object fieldValue = field.get(clazz);
+                Object fieldValue = field.get(bean);
                 DataTypes.putData(values, fieldName, fieldValue);
                 field.setAccessible(false);
             } catch (IllegalAccessException e) {

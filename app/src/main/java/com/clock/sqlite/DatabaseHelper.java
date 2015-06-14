@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "create table " + Constant.TABLENAME + "(id int auto incresment,name varchar(20)," +
-                "long starttime,long endtime)";
+                "starttime long ,endtime long)";
         db.execSQL(sql);
     }
 

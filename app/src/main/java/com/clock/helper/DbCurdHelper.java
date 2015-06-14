@@ -2,11 +2,10 @@ package com.clock.helper;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import com.clock.anno.Name;
+import com.clock.anno.Field;
 import com.clock.model.BaseTableBean;
+import com.clock.model.DataTypes;
 import com.clock.sqlite.ContentValuesBuilder;
-
-import java.lang.reflect.Field;
 
 /**
  * USER: liulei
@@ -23,31 +22,36 @@ public class DbCurdHelper {
 
     public void create(BaseTableBean bean) {
         final Class<? extends BaseTableBean> clazz = bean.getClass();
-        String table = ContentValuesBuilder.getTableName(clazz);
+        String table = ContentValuesBuilder.getTableName(bean);
         StringBuilder executeSql = new StringBuilder();
         executeSql.append("ceate table ")
                 .append(table)
                 .append("(");
-        Field[] fields = clazz.getDeclaredFields();
+        java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
         int count = 0;
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Name.class)) {
-                String annovV = field.getAnnotation(Name.class).value();
+        for (java.lang.reflect.Field field : fields) {
+            if (field.isAnnotationPresent(Field.class)) {
+                Field ann = field.getAnnotation(Field.class);
+                String annovV = ann.name();
                 executeSql.append(annovV)
+                        .append(" ")
+                        .append(ann.type())
                         .append(count + 1 == fields.length ? "" : ",");
             } else {
                 executeSql.append(field.getName())
+                        .append(DataTypes.getTypeString(field.getType()))
                         .append(count + 1 == fields.length ? "" : ",");
             }
             count++;
         }
         executeSql.append(")");
+        System.out.println("DbCurdHelper.create" + executeSql.toString());
+        //dataBase.execSQL(executeSql.toString());
     }
 
     public long insert(BaseTableBean bean) {
-        final Class<? extends BaseTableBean> clazz = bean.getClass();
-        String table = ContentValuesBuilder.getTableName(clazz);
-        ContentValues contentValues = ContentValuesBuilder.getContentValues(clazz);
+        String table = ContentValuesBuilder.getTableName(bean);
+        ContentValues contentValues = ContentValuesBuilder.getContentValues(bean);
         return dataBase.insert(table, null, contentValues);
     }
 }

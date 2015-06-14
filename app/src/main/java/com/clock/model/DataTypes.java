@@ -30,7 +30,41 @@ public enum DataTypes {
         return DataTypes.valueOf(objName);
     }
 
-    public static void putData(ContentValues values,String key, Object obj) {
+    public static String getTypeString(Class<?> clazz) {
+        DataTypes dataTypes = getType(clazz);
+        String formatString = "";
+        if (dataTypes != null) {
+            switch (dataTypes) {
+                case INT:
+                    formatString += "int";
+                    break;
+                case DOUBLE:
+                    formatString += "double";
+                    break;
+                case FLOAT:
+                    formatString += "float";
+                    break;
+                case LONG:
+                    formatString += "long";
+                    break;
+                case BYTE:
+                    formatString += "byte";
+                    break;
+                case BYTES:
+                    formatString += "byte[]";
+                    break;
+                case STRING:
+                    formatString += "varchar(20)";
+                    break;
+                case DATE:
+                    formatString += "date";
+                    break;
+            }
+        }
+        return formatString;
+    }
+
+    public static void putData(ContentValues values, String key, Object obj) {
         DataTypes types = getType(obj.getClass());
         switch (types) {
             case INT:

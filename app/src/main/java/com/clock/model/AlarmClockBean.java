@@ -1,5 +1,6 @@
 package com.clock.model;
 
+import com.clock.anno.Field;
 import com.clock.anno.Table;
 
 /**
@@ -10,8 +11,11 @@ import com.clock.anno.Table;
 @Table(value = "amcolck")
 public class AlarmClockBean extends BaseTableBean {
 
+    @Field(name = "name", type = "varchar(20)")
     private String name;
+    @Field(name = "starttime", type = "datetime")
     private long starttime;
+    @Field(name = "endtime", type = "datetime")
     private long endtime;
 
     public String getName() {

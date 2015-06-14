@@ -9,6 +9,8 @@ import java.lang.annotation.RetentionPolicy;
  * TIME: 19:23
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Name {
-    String value() default "";
+public @interface Field {
+    String name() default "";
+
+    String type();
 }
